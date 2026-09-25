@@ -1,0 +1,1882 @@
+<title>Buyer Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rorange:#FF492C;
+    --navy:#062846;
+    --purple:#5746B2;
+    --yellow:#FFC800;
+    --green:#27D3BC;
+    --blue:#288DFF;
+    --white:#FFFFFF;
+    --gray50:#f2f2f2;
+    --gray200:#e8e8e8;
+    --text:#111111;
+    --text-secondary:#444444;
+    --text-label:#666666;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Figtree',Arial,Helvetica,sans-serif;
+    background:var(--gray50);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,p{margin:0;}
+  button{font-family:inherit;}
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width:220px;
+    flex-shrink:0;
+    background:var(--navy);
+    display:flex;
+    flex-direction:column;
+    padding:20px 0;
+  }
+  .sidebar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 20px 20px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    margin-bottom:16px;
+  }
+  .sidebar-brand svg{flex-shrink:0;}
+  .sidebar-brand span{
+    color:var(--white);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.01em;
+  }
+  .nav-group-label{
+    color:rgba(255,255,255,0.45);
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    padding:0 20px;
+    margin-bottom:8px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:transparent;
+    border:none;
+    border-left:3px solid transparent;
+    color:rgba(255,255,255,0.68);
+    font-size:14px;
+    font-weight:500;
+    padding:10px 20px;
+    cursor:pointer;
+    transition:background 120ms ease,color 120ms ease;
+  }
+  .nav-item svg{flex-shrink:0;opacity:0.8;}
+  .nav-item:hover{color:var(--white);}
+  .nav-item.active{
+    color:var(--white);
+    font-weight:700;
+    background:rgba(255,73,44,0.15);
+    border-left-color:var(--rorange);
+  }
+  .sidebar-foot{
+    margin-top:auto;
+    padding:16px 20px;
+    color:rgba(255,255,255,0.45);
+    font-size:11px;
+    line-height:1.5;
+  }
+
+  /* ---------- Top bar ---------- */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{
+    height:64px;
+    background:var(--white);
+    border-bottom:1px solid var(--gray200);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:10;
+  }
+  .topbar-left{display:flex;align-items:center;gap:14px;}
+  .topbar-title{font-weight:700;font-size:16px;color:var(--text);}
+  .topbar-sub{font-size:12px;color:var(--text-label);}
+  .avatar{
+    width:32px;height:32px;border-radius:50%;
+    background:var(--gray50);
+    border:1px solid var(--gray200);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;color:var(--text-secondary);
+  }
+  .content{padding:32px;max-width:1120px;width:100%;margin:0 auto;}
+
+  .referral-banner{
+    display:flex;align-items:center;gap:12px;
+    background:rgba(255,200,0,0.16);
+    border:1px solid rgba(255,200,0,0.4);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:20px;
+    cursor:pointer;
+    border-width:0;width:100%;text-align:left;font-family:inherit;
+    transition:background 120ms ease;
+  }
+  .referral-banner:hover{background:rgba(255,200,0,0.26);}
+  .referral-banner .r-icon{
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,200,0,0.4);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#111;
+  }
+  .referral-banner .r-text{flex:1;min-width:0;}
+  .referral-banner .r-title{font-size:13.5px;font-weight:800;color:#111;}
+  .referral-banner .r-sub{font-size:12px;font-weight:500;color:#5c4900;margin-top:1px;}
+  .referral-banner .r-chevron{color:#5c4900;flex-shrink:0;}
+
+  .alerts-banner{background:rgba(87,70,178,0.10);border-color:rgba(87,70,178,0.3);}
+  .alerts-banner:hover{background:rgba(87,70,178,0.16);}
+  .alerts-banner .r-icon{background:rgba(87,70,178,0.18);color:var(--purple);}
+  .alerts-banner .r-title{color:var(--text);}
+  .alerts-banner .r-sub{color:var(--text-secondary);}
+  .alerts-banner .r-chevron{color:var(--text-label);}
+
+  .decision-card{
+    background:var(--white);
+    border:1px solid var(--gray200);
+    border-radius:10px;
+    padding:22px 24px;
+    margin-bottom:20px;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .decision-head{display:flex;gap:14px;align-items:flex-start;}
+  .decision-icon{
+    width:40px;height:40px;border-radius:50%;flex-shrink:0;
+    background:rgba(87,70,178,0.12);color:var(--purple);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .decision-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px;}
+  .decision-sub{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+  .decision-stat{
+    display:flex;align-items:center;gap:16px;
+    background:var(--gray50);border-radius:8px;padding:14px 16px;
+  }
+  .decision-stat .stat-num{
+    font-size:28px;font-weight:800;color:var(--purple);
+    font-variant-numeric:tabular-nums;flex-shrink:0;line-height:1;
+  }
+  .decision-stat .stat-text{font-size:12.5px;color:var(--text-secondary);line-height:1.4;}
+  .decision-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;}
+
+  .nudge-banner{background:rgba(40,141,255,0.08);border-color:rgba(40,141,255,0.3);}
+  .nudge-banner:hover{background:rgba(40,141,255,0.14);}
+  .nudge-banner .r-icon{background:rgba(40,141,255,0.18);color:#1a6cc7;}
+  .nudge-banner .r-title{color:var(--text);}
+  .nudge-banner .r-sub{color:var(--text-secondary);}
+  .nudge-banner .r-chevron{color:var(--text-label);}
+
+  .star-picker{display:flex;gap:4px;}
+  .star-picker button{
+    background:none;border:none;cursor:pointer;padding:0;
+    font-size:26px;line-height:1;color:var(--gray200);font-family:inherit;
+  }
+  .star-picker button.filled{color:#d9a900;}
+
+  .convo-row{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+    padding:13px 0;flex-wrap:wrap;
+  }
+  .convo-row + .convo-row{border-top:1px solid var(--gray50);}
+  .convo-left{display:flex;gap:10px;min-width:0;flex:1;}
+  .convo-name{font-size:13.5px;font-weight:700;color:var(--text);}
+  .convo-stars{font-size:12px;color:#d9a900;margin-top:2px;letter-spacing:1px;}
+  .convo-note{font-size:12.5px;color:var(--text-secondary);margin-top:4px;line-height:1.4;max-width:320px;}
+  .convo-empty{font-size:13px;color:var(--text-label);padding:6px 0;}
+
+  .alert-bulk-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:11px 0;flex-wrap:wrap;
+  }
+  .alert-bulk-row + .alert-bulk-row{border-top:1px solid var(--gray50);}
+  .abr-name{font-size:13.5px;font-weight:700;color:var(--text);}
+  .abr-checks{display:flex;gap:16px;}
+  .abr-checks label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-secondary);cursor:pointer;font-weight:500;}
+  .abr-checks input[type="checkbox"]{width:15px;height:15px;accent-color:var(--purple);cursor:pointer;}
+
+  .page-header{margin-bottom:20px;}
+  .page-header h1{font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px;}
+  .page-header p{font-size:14px;color:var(--text-secondary);}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    border-radius:100px;
+    padding:10px 20px;
+    font-size:14px;font-weight:700;
+    border:none;cursor:pointer;
+    transition:opacity 120ms ease,transform 80ms ease;
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--purple);color:var(--white);}
+  .btn-primary:hover{opacity:0.9;}
+  .btn-primary:disabled{background:var(--gray200);color:var(--text-label);cursor:default;}
+  .btn-dark{background:var(--navy);color:var(--white);}
+  .btn-dark:hover{opacity:0.9;}
+  .btn-ghost{background:transparent;color:var(--purple);border:1px solid var(--gray200);}
+  .btn-ghost:hover{background:var(--gray50);}
+  .btn-sm{padding:7px 14px;font-size:13px;}
+  .link-btn{
+    background:none;border:none;padding:0;cursor:pointer;
+    color:var(--purple);font-weight:700;font-size:13px;font-family:inherit;
+  }
+  .alert-link{
+    display:flex;align-items:center;gap:6px;
+    background:none;border:none;padding:0;cursor:pointer;
+    color:var(--text-label);font-weight:600;font-size:12px;font-family:inherit;
+  }
+  .alert-link:hover{color:var(--text-secondary);}
+  .alert-link.on{color:#1a7d70;}
+
+  /* ---------- Confidence card ---------- */
+  .confidence-card{
+    background:var(--white);
+    border:1px solid var(--gray200);
+    border-radius:8px;
+    padding:20px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    margin-bottom:24px;
+  }
+  .confidence-top{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .confidence-actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    padding-top:16px;
+    border-top:1px solid var(--gray50);
+  }
+  .action-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex:1;
+    min-width:220px;
+    border-radius:10px;
+    padding:14px 18px;
+    border:none;
+    cursor:pointer;
+    text-align:left;
+    font-family:inherit;
+    transition:transform 100ms ease,opacity 120ms ease;
+  }
+  .action-btn:active{transform:scale(0.99);}
+  .action-btn-icon{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .action-btn-text .action-title{font-size:14px;font-weight:800;line-height:1.2;}
+  .action-btn-text .action-sub{font-size:12px;line-height:1.3;margin-top:2px;}
+  .action-btn.primary{background:var(--purple);color:var(--white);}
+  .action-btn.primary:hover{opacity:0.92;}
+  .action-btn.primary .action-btn-icon{background:rgba(255,255,255,0.18);}
+  .action-btn.primary .action-sub{color:rgba(255,255,255,0.8);}
+  .action-btn.dark{background:var(--navy);color:var(--white);}
+  .action-btn.dark:hover{opacity:0.92;}
+  .action-btn.dark .action-btn-icon{background:rgba(255,255,255,0.16);}
+  .action-btn.dark .action-sub{color:rgba(255,255,255,0.75);}
+  .confidence-ring-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .confidence-num{font-size:26px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;}
+  .confidence-label{font-size:11px;color:var(--text-label);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+  .confidence-body{flex:1;min-width:220px;}
+  .confidence-body h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+  .confidence-body p{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+  .meter-track{
+    height:6px;background:var(--gray200);border-radius:100px;overflow:hidden;margin-top:10px;max-width:360px;
+  }
+  .meter-fill{height:100%;background:var(--purple);border-radius:100px;transition:width 400ms ease;}
+
+  /* ---------- Vendor grid ---------- */
+  .vendor-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:16px;
+  }
+  .vendor-card{
+    background:var(--white);
+    border:1px solid var(--gray200);
+    border-radius:8px;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .vendor-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .vendor-mark{
+    width:36px;height:36px;border-radius:8px;
+    background:var(--gray50);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:14px;color:var(--navy);
+    flex-shrink:0;
+  }
+  .vendor-name-row{display:flex;align-items:center;gap:10px;}
+  .vendor-name{font-size:16px;font-weight:700;color:var(--text);}
+  .match-pill{
+    font-size:12px;font-weight:700;color:var(--text);
+    background:var(--gray50);
+    border:1px solid var(--gray200);
+    padding:3px 10px;border-radius:20px;
+    flex-shrink:0;
+    font-variant-numeric:tabular-nums;
+  }
+  .stars{font-size:12px;color:var(--yellow-text,#a07800);font-weight:700;display:flex;align-items:center;gap:5px;}
+  .stars .star-glyphs{letter-spacing:1px;color:#d9a900;}
+  .review-count{color:var(--text-label);font-weight:500;}
+  .reasons{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}
+  .reasons li{
+    font-size:13px;color:var(--text-secondary);line-height:1.45;
+    padding-left:16px;position:relative;
+  }
+  .reasons li::before{
+    content:"";
+    position:absolute;left:0;top:6px;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--purple);
+  }
+  .review-snippet{
+    font-size:13px;color:var(--text-secondary);
+    font-style:italic;
+    background:var(--gray50);
+    border-radius:6px;
+    padding:10px 12px;
+    line-height:1.5;
+  }
+  .blur-wrap{position:relative;}
+  .blur-wrap .blurred{filter:blur(4px);user-select:none;}
+  .unlock-overlay{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    text-align:center;padding:8px;
+    background:rgba(255,255,255,0.35);
+    border-radius:6px;
+  }
+  .unlock-overlay p{font-size:12px;font-weight:700;color:var(--text);max-width:180px;line-height:1.4;}
+
+  .card-foot{
+    margin-top:auto;
+    display:flex;flex-direction:column;gap:10px;
+    padding-top:8px;
+    border-top:1px solid var(--gray50);
+  }
+  .badge-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+  .cta-row{display:flex;gap:8px;flex-wrap:wrap;}
+
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:4px 11px;border-radius:20px;
+    font-size:12px;font-weight:600;
+  }
+  .badge-success{background:rgba(39,211,188,0.14);color:#1a7d70;border:1px solid rgba(39,211,188,0.35);}
+  .badge-neutral{background:var(--gray50);color:var(--text-secondary);border:1px solid var(--gray200);}
+  .badge-info{background:rgba(40,141,255,0.10);color:#1a6cc7;border:1px solid rgba(40,141,255,0.28);}
+  .badge-warning{background:rgba(255,200,0,0.14);color:#8a6800;border:1px solid rgba(255,200,0,0.35);}
+
+  /* ---------- Workspace ---------- */
+  .workspace-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:860px){.workspace-grid{grid-template-columns:1fr;}}
+
+  .panel{
+    background:var(--white);
+    border:1px solid var(--gray200);
+    border-radius:8px;
+    padding:22px 24px;
+  }
+  .panel + .panel{margin-top:20px;}
+  .panel h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;}
+  .req-row{
+    display:flex;justify-content:space-between;gap:16px;
+    padding:10px 0;
+  }
+  .req-row + .req-row{border-top:1px solid var(--gray50);}
+  .req-label{font-size:12px;color:var(--text-label);font-weight:600;flex-shrink:0;width:110px;}
+  .req-value{font-size:13px;color:var(--text);text-align:right;flex:1;}
+  .req-value.muted{color:var(--text-label);font-style:italic;}
+
+  .status-list{display:flex;flex-direction:column;gap:0;}
+  .status-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 0;
+    flex-wrap:wrap;
+  }
+  .status-row + .status-row{border-top:1px solid var(--gray50);}
+  .status-vendor{display:flex;align-items:center;gap:10px;min-width:0;}
+  .status-vendor-name{font-size:14px;font-weight:700;color:var(--text);}
+  .status-vendor-match{font-size:12px;color:var(--text-label);}
+  .status-vendor-when{font-size:12px;color:#1a6cc7;font-weight:600;margin-top:1px;}
+  .status-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+  /* ---------- Upcoming calls ---------- */
+  .upcoming-empty{font-size:13px;color:var(--text-label);}
+  .upcoming-item{
+    display:flex;align-items:center;gap:14px;
+    padding:12px 0;
+  }
+  .upcoming-item + .upcoming-item{border-top:1px solid var(--gray50);}
+  .upcoming-datebox{
+    width:52px;height:52px;flex-shrink:0;
+    border-radius:8px;
+    background:var(--gray50);
+    border:1px solid var(--gray200);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-variant-numeric:tabular-nums;
+  }
+  .upcoming-datebox .dow{font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:0.05em;}
+  .upcoming-datebox .dom{font-size:17px;font-weight:800;color:var(--text);line-height:1.1;}
+  .upcoming-info{flex:1;min-width:0;}
+  .upcoming-info .u-vendor{font-size:14px;font-weight:700;color:var(--text);}
+  .upcoming-info .u-when{font-size:12.5px;color:var(--text-secondary);margin-top:1px;}
+  .upcoming-reminder{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;font-weight:600;color:var(--text-label);
+    margin-top:4px;
+  }
+
+  .assist-card{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:16px 0;
+  }
+  .assist-card + .assist-card{border-top:1px solid var(--gray50);}
+  .assist-icon{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--gray50);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .assist-body h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+  .assist-body p{font-size:12.5px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;}
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(6,40,70,0.45);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;z-index:100;
+  }
+  .modal-backdrop[hidden]{display:none;}
+  .modal{
+    background:var(--white);
+    border-radius:12px;
+    max-width:420px;width:100%;
+    padding:26px 26px 22px;
+    max-height:90vh;overflow-y:auto;
+  }
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .cal-month{font-size:14px;font-weight:800;color:var(--text);}
+  .cal-nav-btn{
+    width:26px;height:26px;border-radius:50%;
+    border:1px solid var(--gray200);background:var(--white);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);
+  }
+  .cal-nav-btn:hover{background:var(--gray50);}
+  .cal-dow-row,.cal-day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;padding-bottom:6px;}
+  .cal-day-btn{
+    aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:600;color:var(--text);
+    border:none;background:transparent;border-radius:8px;cursor:pointer;
+    font-family:inherit;font-variant-numeric:tabular-nums;
+  }
+  .cal-day-btn:hover:not(:disabled){background:var(--gray50);}
+  .cal-day-btn.outside{color:#d4d4d4;}
+  .cal-day-btn:disabled{color:#d4d4d4;cursor:default;background:transparent;}
+  .cal-day-btn.today{box-shadow:inset 0 0 0 1.5px var(--gray200);}
+  .cal-day-btn.selected{background:var(--purple);color:var(--white);}
+  .cal-hint{font-size:11.5px;color:var(--text-label);margin-top:12px;line-height:1.5;}
+
+  .modal h3{font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px;}
+  .modal .modal-sub{font-size:13px;color:var(--text-secondary);margin-bottom:18px;line-height:1.5;}
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:12px;font-weight:700;color:var(--text);
+    margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em;
+  }
+  .field input[type="date"],.field textarea{
+    width:100%;
+    border:1px solid var(--gray200);
+    border-radius:6px;
+    padding:10px 12px;
+    font-family:inherit;font-size:13px;color:var(--text);
+    background:var(--white);
+  }
+  .field textarea{resize:vertical;min-height:64px;}
+  .pill-options{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill-option{
+    border:1px solid var(--gray200);
+    background:var(--white);
+    border-radius:100px;
+    padding:8px 16px;
+    font-size:13px;font-weight:600;color:var(--text-secondary);
+    cursor:pointer;
+  }
+  .pill-option.selected{
+    background:rgba(87,70,178,0.10);
+    border-color:var(--purple);
+    color:var(--purple);
+  }
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;}
+  .modal-close{
+    position:absolute;top:16px;right:16px;
+    background:none;border:none;cursor:pointer;color:var(--text-label);
+    width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  }
+  .modal-wrap{position:relative;}
+
+  .share-link-row{display:flex;gap:8px;}
+  .share-link-row input{
+    flex:1;min-width:0;
+    border:1px solid var(--gray200);border-radius:6px;
+    padding:9px 10px;font-family:inherit;font-size:12.5px;color:var(--text-secondary);
+    background:var(--gray50);
+  }
+  .share-people{margin-top:6px;}
+  .share-person-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:9px 0;
+  }
+  .share-person-row + .share-person-row{border-top:1px solid var(--gray50);}
+  .share-person-left{display:flex;align-items:center;gap:10px;min-width:0;}
+  .share-person-avatar{
+    width:28px;height:28px;border-radius:50%;flex-shrink:0;
+    background:var(--gray50);border:1px solid var(--gray200);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;color:var(--text-secondary);
+  }
+  .share-person-email{font-size:13px;color:var(--text);}
+  .share-person-role{font-size:11.5px;color:var(--text-label);}
+  .share-remove-btn{background:none;border:none;cursor:pointer;color:var(--text-label);padding:4px;flex-shrink:0;}
+  .share-remove-btn:hover{color:#CC3A23;}
+
+  .confirm-state{text-align:center;padding:8px 4px 4px;}
+  .confirm-icon{
+    width:52px;height:52px;border-radius:50%;
+    background:rgba(39,211,188,0.14);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 14px;
+  }
+  .confirm-state h3{margin-bottom:6px;}
+  .confirm-state p{font-size:13px;color:var(--text-secondary);line-height:1.55;margin-bottom:18px;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--navy);color:var(--white);
+    padding:12px 20px;border-radius:100px;
+    font-size:13px;font-weight:600;
+    box-shadow:0 8px 24px rgba(6,40,70,0.25);
+    opacity:0;pointer-events:none;
+    transition:opacity 200ms ease,transform 200ms ease;
+    z-index:200;
+    max-width:90vw;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .chat-panel{
+    display:flex;flex-direction:column;
+    background:var(--white);border:1px solid var(--gray200);border-radius:8px;
+    overflow:hidden;height:600px;max-height:70vh;
+  }
+  .chat-messages{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:12px;}
+  .chat-msg{
+    max-width:75%;padding:10px 14px;border-radius:14px;
+    font-size:13.5px;line-height:1.5;
+  }
+  .chat-msg.agent{background:var(--gray50);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;}
+  .chat-msg.buyer{background:var(--purple);color:var(--white);align-self:flex-end;border-bottom-right-radius:4px;}
+  .chat-input-row{
+    display:flex;gap:10px;padding:14px 16px;
+    border-top:1px solid var(--gray200);flex-shrink:0;
+  }
+  .chat-input-row input{
+    flex:1;border:1px solid var(--gray200);border-radius:100px;
+    padding:10px 16px;font-family:inherit;font-size:13.5px;color:var(--text);
+  }
+
+  .tabpanel[hidden]{display:none;}
+
+  @media (max-width:720px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;flex-direction:row;overflow-x:auto;padding:10px 0;}
+    .sidebar-brand{display:none;}
+    .nav-group-label{display:none;}
+    .nav-item{border-left:none;border-bottom:3px solid transparent;padding:10px 16px;white-space:nowrap;}
+    .nav-item.active{border-bottom-color:var(--rorange);}
+    .sidebar-foot{display:none;}
+    .content{padding:20px 16px;}
+    .req-row{flex-direction:column;align-items:flex-start;gap:2px;}
+    .req-value{text-align:left;}
+    .req-label{width:auto;}
+  }
+</style>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg width="26" height="26" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M50 25C50 38.807 38.807 50 25 50C11.193 50 0 38.807 0 25C0 11.193 11.193 0 25 0C38.807 0 50 11.193 50 25Z" fill="#FF492C"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M35.8349 19.1462H31.5624C31.6784 18.4766 32.0914 18.1031 32.9307 17.6781L33.718 17.2788C35.125 16.5579 35.8736 15.7465 35.8736 14.4199C35.8736 13.5828 35.551 12.9258 34.9055 12.4496C34.2731 11.973 33.4985 11.741 32.6078 11.741C31.8979 11.741 31.2524 11.9214 30.6587 12.2948C30.0779 12.6556 29.6389 13.1192 29.368 13.6986L30.6073 14.9351C31.0847 13.9692 31.7818 13.4926 32.6982 13.4926C33.4728 13.4926 33.9505 13.892 33.9505 14.4455C33.9505 14.9094 33.718 15.2955 32.8273 15.7465L32.3239 15.9911C31.2268 16.5449 30.4652 17.1759 30.0262 17.8971C29.5875 18.6054 29.368 19.5196 29.368 20.6146V20.9108H35.8349V19.1462Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M35.2541 22.9554H28.1907L24.6592 29.0736H31.7226L35.2541 35.1921L38.7856 29.0736L35.2541 22.9554Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.2576 33.1608C20.7546 33.1608 17.0912 29.5 17.0912 25C17.0912 20.5004 20.7546 16.8395 25.2576 16.8395L28.0533 10.9926C27.1493 10.8133 26.2146 10.7187 25.2576 10.7187C17.3649 10.7187 10.9665 17.1128 10.9665 25C10.9665 32.8876 17.3649 39.2813 25.2576 39.2813C28.4044 39.2813 31.3132 38.2643 33.6741 36.5421L30.5779 31.1834C29.1477 32.4141 27.2887 33.1608 25.2576 33.1608Z" fill="white"/>
+      </svg>
+      <span>Buyer Workspace</span>
+    </div>
+
+    <div class="nav-group-label">Evaluation</div>
+    <button class="nav-item active" data-tab="shortlist" id="nav-shortlist">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+      Shortlist
+    </button>
+    <button class="nav-item" data-tab="workspace" id="nav-workspace">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      My Workspace
+    </button>
+    <button class="nav-item" data-tab="chat" id="nav-chat">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="13" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="17" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+      Chat
+    </button>
+
+    <div class="sidebar-foot">Signed in as arosha@buyer&nbsp;·&nbsp;Prototype build, not connected to production data.</div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-title" id="topbar-title">Your shortlist</div>
+          <div class="topbar-sub" id="topbar-sub">HR software &middot; 150&ndash;300 employees</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="openShareModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>
+          Share
+        </button>
+        <div class="avatar">JT</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- SHORTLIST TAB -->
+      <section class="tabpanel" id="tab-shortlist">
+        <div class="page-header">
+          <h1>Your initial shortlist</h1>
+          <p>Five matches based on what you've shared. Answer a few more questions to sharpen this list.</p>
+        </div>
+
+        <div id="workspace-nudge"></div>
+
+        <button type="button" class="referral-banner" onclick="openReferralModal()">
+          <span class="r-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9"/><path d="M12 8a2.5 2.5 0 10-2.5-2.5C9.5 7.5 12 8 12 8zM12 8a2.5 2.5 0 102.5-2.5C14.5 7.5 12 8 12 8z"/></svg>
+          </span>
+          <span class="r-text">
+            <div class="r-title">Refer a friend, get a $50 gift card</div>
+            <div class="r-sub">We'll build them a shortlist too — it's free for both of you</div>
+          </span>
+          <svg class="r-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <button type="button" class="referral-banner alerts-banner" onclick="openAlertsOverviewModal()">
+          <span class="r-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </span>
+          <span class="r-text">
+            <div class="r-title">Opt into SMS/email alerts from these vendors</div>
+            <div class="r-sub">Get a heads up the moment a vendor reaches out — turn any of them off any time</div>
+          </span>
+          <svg class="r-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <div class="confidence-card">
+          <div class="confidence-top">
+            <div class="confidence-ring-wrap">
+              <div class="confidence-num" id="confidence-num">62%</div>
+              <div class="confidence-label">Confidence</div>
+            </div>
+            <div class="confidence-body">
+              <h4>These recommendations will get sharper</h4>
+              <p>Add your budget range or keep chatting with the agent, and we'll refine fit, pricing detail, and confidence for every vendor below.</p>
+              <div class="meter-track"><div class="meter-fill" id="confidence-meter" style="width:62%"></div></div>
+            </div>
+          </div>
+          <div class="confidence-actions">
+            <button class="action-btn primary" onclick="switchTab('chat')">
+              <span class="action-btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="9" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="13" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="17" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+              </span>
+              <span class="action-btn-text">
+                <div class="action-title">Continue chat</div>
+                <div class="action-sub">Answer a few more questions to sharpen your shortlist</div>
+              </span>
+            </button>
+            <button class="action-btn dark" onclick="showToast('Connecting you with a G2 advisor — this is a prototype step.')">
+              <span class="action-btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
+              </span>
+              <span class="action-btn-text">
+                <div class="action-title">Talk to an advisor</div>
+                <div class="action-sub">Prefer a human? Get a call to refine your shortlist together</div>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="vendor-grid" id="vendor-grid"></div>
+      </section>
+
+      <!-- WORKSPACE TAB -->
+      <section class="tabpanel" id="tab-workspace" hidden>
+        <div class="page-header">
+          <h1>My software evaluation</h1>
+          <p>Everything about your search in one place — shortlist, requirements, and next steps.</p>
+        </div>
+
+        <div id="decision-help-card"></div>
+
+        <button type="button" class="referral-banner" onclick="openReferralModal()">
+          <span class="r-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9"/><path d="M12 8a2.5 2.5 0 10-2.5-2.5C9.5 7.5 12 8 12 8zM12 8a2.5 2.5 0 102.5-2.5C14.5 7.5 12 8 12 8z"/></svg>
+          </span>
+          <span class="r-text">
+            <div class="r-title">Refer a friend, get a $50 gift card</div>
+            <div class="r-sub">We'll build them a shortlist too — it's free for both of you</div>
+          </span>
+          <svg class="r-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <div class="workspace-grid">
+          <div>
+            <div class="panel">
+              <h3>Upcoming calls</h3>
+              <div id="upcoming-list"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Shortlist &amp; scheduling status</h3>
+              <div class="status-list" id="status-list"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Notes &amp; vendor ratings</h3>
+              <p style="font-size:12.5px;color:var(--text-label);margin-bottom:4px;">Once you've connected with a vendor, log how the conversation went — only you can see this unless you choose to post a review.</p>
+              <div id="convo-list"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="panel">
+              <h3>Your requirements so far</h3>
+              <div class="req-row"><div class="req-label">Timeframe</div><div class="req-value">Ready to buy within 30 days</div></div>
+              <div class="req-row"><div class="req-label">Use case</div><div class="req-value">Replacing spreadsheet-based HR, adding payroll automation</div></div>
+              <div class="req-row"><div class="req-label">Company</div><div class="req-value">150&ndash;300 employees <span style="color:var(--text-label);font-weight:500;">(from work email)</span></div></div>
+              <div class="req-row"><div class="req-label">Budget</div><div class="req-value muted" id="req-budget-value">Not shared yet</div></div>
+              <div style="margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="switchTab('chat')">Add more detail</button></div>
+            </div>
+
+            <div class="panel">
+              <h3>Get more help</h3>
+              <div class="assist-card">
+                <div class="assist-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#062846" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="assist-body">
+                  <h4>Talk to a G2 advisor</h4>
+                  <p>A short call to go deeper on your requirements and get a more precise, human-reviewed shortlist.</p>
+                  <button class="btn btn-dark btn-sm" onclick="showToast('Connecting you with a G2 advisor — this is a prototype step.')">Start a call</button>
+                </div>
+              </div>
+              <div class="assist-card">
+                <div class="assist-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#062846" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                </div>
+                <div class="assist-body">
+                  <h4>Keep chatting with the agent</h4>
+                  <p>Answer a few more questions yourself to improve confidence and unlock blurred details.</p>
+                  <button class="btn btn-ghost btn-sm" onclick="switchTab('chat')">Continue chat</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHAT TAB -->
+      <section class="tabpanel" id="tab-chat" hidden>
+        <div class="page-header">
+          <h1>Chat with your agent</h1>
+          <p>Answer a few questions here to sharpen your shortlist — anything you share updates your recommendations.</p>
+        </div>
+        <div class="chat-panel">
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-row">
+            <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+            <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">Send</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- Scheduling modal -->
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal modal-wrap" id="modal-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var vendors = [
+    {
+      id: 'rippling', name: 'Rippling', mark: 'RP', match: 94,
+      rating: '4.6', reviews: '1,240',
+      reasons: [
+        'Runs payroll and IT device provisioning from one system',
+        'Scales cleanly as you add headcount and new countries',
+        'Strong fit for your 150–300 employee range'
+      ],
+      review: '"Runs payroll and device provisioning in one place — cut our onboarding time in half."',
+      scheduling: 'program', schedNote: 'Usually confirms within 1 business day',
+      status: 'none', blurred: false, alertsOn: true, alertChannels: { email: true, sms: false }
+    },
+    {
+      id: 'gusto', name: 'Gusto', mark: 'GU', match: 88,
+      rating: '4.7', reviews: '3,050',
+      reasons: [
+        'Simplest setup for teams under 300 people',
+        'Transparent per-employee pricing, no hidden tiers',
+        'Benefits administration included out of the box'
+      ],
+      review: '"Onboarded 40 new hires in a single pay cycle without a hiccup."',
+      scheduling: 'program', schedNote: 'Usually confirms within 1 business day',
+      status: 'none', blurred: false, alertsOn: true, alertChannels: { email: true, sms: false }
+    },
+    {
+      id: 'bamboohr', name: 'BambooHR', mark: 'BH', match: 82,
+      rating: '4.5', reviews: '2,410',
+      reasons: [
+        'Strong applicant tracking and onboarding workflows',
+        'Well regarded for performance and culture tools',
+        'Integrates with 100+ common HR tools'
+      ],
+      review: '"Great for building out our review cycle — the workflows are intuitive."',
+      scheduling: 'availability', schedNote: 'Usually replies within 2–3 business days',
+      status: 'none', blurred: true, alertsOn: true, alertChannels: { email: true, sms: false }
+    },
+    {
+      id: 'paylocity', name: 'Paylocity', mark: 'PL', match: 79,
+      rating: '4.3', reviews: '1,680',
+      reasons: [
+        'Robust compliance and payroll tax reporting',
+        'Benefits marketplace with broker support',
+        'Well suited to regulated industries'
+      ],
+      review: '"Compliance reporting alone saved our team hours every quarter."',
+      scheduling: 'program', schedNote: 'Usually confirms within 2 business days',
+      status: 'none', blurred: false, alertsOn: true, alertChannels: { email: true, sms: false }
+    },
+    {
+      id: 'deel', name: 'Deel', mark: 'DL', match: 75,
+      rating: '4.6', reviews: '5,120',
+      reasons: [
+        'Built for global and contractor-heavy teams',
+        'Handles compliance across 100+ countries',
+        'Lower fit signal — add budget to confirm this match'
+      ],
+      review: '"Made hiring contractors abroad painless — compliance is handled for us."',
+      scheduling: 'availability', schedNote: 'Usually replies within 2–3 business days',
+      status: 'none', blurred: true, alertsOn: true, alertChannels: { email: true, sms: false }
+    }
+  ];
+
+  var activeTab = 'shortlist';
+
+  // Buyer profile — what's missing here gates scheduling until it's filled in.
+  var profile = {
+    budget: null,
+    budgetLabel: 'Not shared yet'
+  };
+
+  function missingProfileFields(){
+    var missing = [];
+    if (!profile.budget) missing.push('budget');
+    return missing;
+  }
+
+  function starGlyphs(rating){
+    var full = Math.round(parseFloat(rating));
+    var s = '';
+    for (var i=0;i<5;i++){ s += i < full ? '★' : '☆'; }
+    return s;
+  }
+
+  function schedBadge(v){
+    if (v.status === 'confirmed') return '<span class="badge badge-success">Call confirmed</span>';
+    if (v.status === 'requested') return '<span class="badge badge-info">Availability sent</span>';
+    if (v.scheduling === 'program') return '<span class="badge badge-success">Schedules directly with vendor</span>';
+    return '';
+  }
+
+  function ctaForVendor(v){
+    if (v.status === 'confirmed') {
+      return '<button class="btn btn-ghost btn-sm" disabled style="opacity:.7;cursor:default;">Booked ✓</button>';
+    }
+    if (v.status === 'requested') {
+      return '<button class="btn btn-ghost btn-sm" disabled style="opacity:.7;cursor:default;">Sent ✓</button>';
+    }
+    if (v.scheduling === 'program') {
+      return '<button class="btn btn-primary btn-sm" onclick="openScheduleModal(\'' + v.id + '\')">Schedule a call</button>';
+    }
+    return '<button class="btn btn-dark btn-sm" onclick="openScheduleModal(\'' + v.id + '\')">Send my availability</button>';
+  }
+
+  function alertLink(v){
+    var bellOn = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>';
+    if (v.alertsOn) {
+      return '<button type="button" class="alert-link on" onclick="openAlertsModal(\''+v.id+'\')">'+bellOn+' Alerts on · Manage</button>';
+    }
+    return '<button type="button" class="alert-link" onclick="openAlertsModal(\''+v.id+'\')">'+bellOn+' Get SMS/email alerts from '+v.name+'</button>';
+  }
+
+  function renderShortlist(){
+    var grid = document.getElementById('vendor-grid');
+    grid.innerHTML = vendors.map(function(v){
+      var reasonsHtml = v.reasons.map(function(r){ return '<li>'+r+'</li>'; }).join('');
+      var reviewBlock = '<div class="review-snippet">' + v.review + '<div style="margin-top:6px;" class="stars"><span class="star-glyphs">'+starGlyphs(v.rating)+'</span> ' + v.rating + ' <span class="review-count">(' + v.reviews + ' reviews)</span></div></div>';
+
+      var body;
+      if (v.blurred) {
+        body = '<div class="blur-wrap">' +
+                 '<ul class="reasons blurred">' + reasonsHtml + '</ul>' +
+                 '<div class="unlock-overlay">' +
+                   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>' +
+                   '<p>Add budget or company detail to unlock the full fit analysis</p>' +
+                 '</div>' +
+               '</div>';
+      } else {
+        body = '<ul class="reasons">' + reasonsHtml + '</ul>';
+      }
+
+      return '' +
+      '<div class="vendor-card" id="card-'+v.id+'">' +
+        '<div class="vendor-card-head">' +
+          '<div class="vendor-name-row">' +
+            '<div class="vendor-mark">'+v.mark+'</div>' +
+            '<div><div class="vendor-name">'+v.name+'</div>' +
+            '<div class="stars"><span class="star-glyphs">'+starGlyphs(v.rating)+'</span> '+v.rating+' <span class="review-count">('+v.reviews+')</span></div></div>' +
+          '</div>' +
+          '<div class="match-pill">'+v.match+'% match</div>' +
+        '</div>' +
+        body +
+        reviewBlock +
+        '<div class="card-foot">' +
+          '<div class="badge-row">' + schedBadge(v) + '<button class="link-btn" onclick="showToast(\'Opening full profile for '+v.name+'.\')">View details</button></div>' +
+          '<div class="cta-row">' + ctaForVendor(v) + '</div>' +
+          alertLink(v) +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function formatRequested(v){
+    if (!v.requestedDates || v.requestedDates.length === 0) return 'Time TBD · ' + capitalize(v.requestedWindow || '');
+    var d = new Date(v.requestedDates[0] + 'T00:00:00');
+    var dateStr = d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+    var extra = v.requestedDates.length > 1 ? ' (+' + (v.requestedDates.length - 1) + ' more)' : '';
+    return dateStr + extra + ' · ' + capitalize(v.requestedWindow || '');
+  }
+  function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  function renderDecisionHelp(){
+    var el = document.getElementById('decision-help-card');
+    if (!el) return;
+    var convoCount = vendors.filter(function(v){ return !!v.convo; }).length;
+    if (convoCount < 2) { el.innerHTML = ''; return; }
+    el.innerHTML = '' +
+      '<div class="decision-card">' +
+        '<div class="decision-head">' +
+          '<div class="decision-icon">' +
+            '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8l-3 5a4 4 0 008 0z"/><path d="M19 8l-3 5a4 4 0 008 0z"/><path d="M5 8h6M13 8h6"/></svg>' +
+          '</div>' +
+          '<div>' +
+            '<div class="decision-title">Different prices, deployment types, quotes — hard to compare?</div>' +
+            '<div class="decision-sub">You’ve talked to '+convoCount+' vendors so far. A negotiator can line up what you’ve heard side by side and help you land on the right one.</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="decision-stat">' +
+          '<div class="stat-num">89%</div>' +
+          '<div class="stat-text">of businesses your size who talked to a G2 advisor reached a confident decision — instead of stalling on the comparison.</div>' +
+        '</div>' +
+        '<div class="decision-actions">' +
+          '<button class="btn btn-ghost btn-sm" onclick="switchTab(\'chat\')">I’ll keep comparing myself</button>' +
+          '<button class="btn btn-primary btn-sm" onclick="openNegotiatorModal()">Talk to a negotiator</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function openNegotiatorModal(){
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="action-btn-icon" style="background:rgba(87,70,178,0.12);width:44px;height:44px;margin-bottom:14px;color:var(--purple);">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8l-3 5a4 4 0 008 0z"/><path d="M19 8l-3 5a4 4 0 008 0z"/><path d="M5 8h6M13 8h6"/></svg>' +
+      '</div>' +
+      '<h3>Get help evaluating your choices</h3>' +
+      '<p class="modal-sub">A G2 negotiator reviews the notes, quotes and deployment details you’ve gathered across vendors, then helps you weigh the tradeoffs and negotiate pricing before you commit.</p>' +
+      '<div class="decision-stat" style="margin-bottom:18px;">' +
+        '<div class="stat-num">89%</div>' +
+        '<div class="stat-text">of businesses your size who worked with a G2 advisor reached a confident decision.</div>' +
+      '</div>' +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Not now</button>' +
+        '<button class="btn btn-primary" onclick="submitNegotiatorRequest()">Request a negotiator call</button>' +
+      '</div>';
+    backdrop.hidden = false;
+  }
+
+  function submitNegotiatorRequest(){
+    var modalEl = document.getElementById('modal-body');
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="confirm-state">' +
+        '<div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a7d70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+        '<h3>Request sent</h3>' +
+        '<p>A G2 negotiator will review what you’ve gathered so far and reach out within 1 business day to help you compare and decide.</p>' +
+        '<button class="btn btn-primary" onclick="closeModal()">Done</button>' +
+      '</div>';
+    showToast('Negotiator request sent.');
+  }
+
+  function renderWorkspace(){
+    var list = document.getElementById('status-list');
+    list.innerHTML = vendors.map(function(v){
+      var statusBadge = (v.status === 'confirmed')
+        ? '<span class="badge badge-success">Confirmed</span>'
+        : (v.status === 'requested')
+          ? '<span class="badge badge-info">Availability sent</span>'
+          : '<span class="badge badge-neutral">Not requested</span>';
+
+      var actionBtn = (v.status === 'none')
+        ? (v.scheduling === 'program'
+            ? '<button class="btn btn-primary btn-sm" onclick="openScheduleModal(\''+v.id+'\')">Schedule</button>'
+            : '<button class="btn btn-dark btn-sm" onclick="openScheduleModal(\''+v.id+'\')">Send availability</button>')
+        : '<button class="btn btn-ghost btn-sm" onclick="showToast(\'Opening full profile for '+v.name+'.\')">View</button>';
+
+      var whenLine = (v.status === 'confirmed')
+        ? '<div class="status-vendor-when">Booked for ' + formatRequested(v) + '</div>'
+        : (v.status === 'requested')
+          ? '<div class="status-vendor-when">Sent for ' + formatRequested(v) + '</div>'
+          : '';
+
+      return '' +
+      '<div class="status-row">' +
+        '<div class="status-vendor">' +
+          '<div class="vendor-mark" style="width:30px;height:30px;font-size:12px;">'+v.mark+'</div>' +
+          '<div><div class="status-vendor-name">'+v.name+'</div><div class="status-vendor-match">'+v.match+'% match</div>'+whenLine+'</div>' +
+        '</div>' +
+        '<div class="status-actions">'+statusBadge+actionBtn+'</div>' +
+      '</div>';
+    }).join('');
+    renderUpcoming();
+    renderConvoList();
+    renderDecisionHelp();
+  }
+
+  function starGlyphsStatic(n){
+    var s = '';
+    for (var i=1;i<=5;i++){ s += i<=n ? '★' : '☆'; }
+    return s;
+  }
+
+  function renderConvoList(){
+    var el = document.getElementById('convo-list');
+    if (!el) return;
+    var contacted = vendors.filter(function(v){ return v.status !== 'none'; });
+    if (contacted.length === 0) {
+      el.innerHTML = '<p class="convo-empty">Once you’ve booked a call or a vendor responds, they’ll show up here so you can log notes and a rating.</p>';
+      return;
+    }
+    el.innerHTML = contacted.map(function(v){
+      var hasConvo = !!v.convo;
+      var right = hasConvo
+        ? '<button class="link-btn" onclick="openConvoModal(\''+v.id+'\')">Edit</button>'
+        : '<button class="btn btn-ghost btn-sm" onclick="openConvoModal(\''+v.id+'\')">Log notes &amp; rating</button>';
+      var summary = hasConvo
+        ? '<div class="convo-stars">'+starGlyphsStatic(v.convo.rating)+'</div>' +
+          (v.convo.notes ? '<div class="convo-note">'+v.convo.notes+'</div>' : '')
+        : '<div class="convo-note" style="color:var(--text-label);">No notes yet</div>';
+      return '' +
+      '<div class="convo-row">' +
+        '<div class="convo-left">' +
+          '<div class="vendor-mark" style="width:30px;height:30px;font-size:12px;flex-shrink:0;">'+v.mark+'</div>' +
+          '<div><div class="convo-name">'+v.name+'</div>'+summary+'</div>' +
+        '</div>' +
+        right +
+      '</div>';
+    }).join('');
+  }
+
+  function renderUpcoming(){
+    var el = document.getElementById('upcoming-list');
+    var scheduled = vendors.filter(function(v){ return v.status === 'requested' || v.status === 'confirmed'; });
+    scheduled.sort(function(a,b){
+      var ad = (a.requestedDates && a.requestedDates[0]) || null;
+      var bd = (b.requestedDates && b.requestedDates[0]) || null;
+      if (!ad) return 1;
+      if (!bd) return -1;
+      return ad.localeCompare(bd);
+    });
+    if (scheduled.length === 0) {
+      el.innerHTML = '<p class="upcoming-empty">Nothing scheduled yet. Once you book a call or send your availability, it’ll show up here so you never lose track of it.</p>';
+      return;
+    }
+    el.innerHTML = scheduled.map(function(v){
+      var first = v.requestedDates && v.requestedDates[0];
+      var d = first ? new Date(first + 'T00:00:00') : null;
+      var dow = d ? d.toLocaleDateString(undefined,{weekday:'short'}) : '––';
+      var dom = d ? d.getDate() : '?';
+      var isConfirmed = v.status === 'confirmed';
+      var label = isConfirmed ? 'Call with '+v.name : 'Availability shared with '+v.name;
+      var optionsLine = (!isConfirmed && v.requestedDates && v.requestedDates.length > 1)
+        ? '<div class="u-when" style="color:var(--text-label);">Options sent: ' + formatDateList(v.requestedDates).join(', ') + '</div>'
+        : '';
+      return '' +
+      '<div class="upcoming-item">' +
+        '<div class="upcoming-datebox"><span class="dow">'+dow+'</span><span class="dom">'+dom+'</span></div>' +
+        '<div class="upcoming-info">' +
+          '<div class="u-vendor">'+label+'</div>' +
+          '<div class="u-when">'+formatRequested(v)+'</div>' +
+          optionsLine +
+          '<div class="upcoming-reminder">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' +
+            (isConfirmed ? 'Booked — we’ll remind you before it starts' : 'We’ll notify you once they respond · ' + v.schedNote.toLowerCase()) +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderWorkspaceNudge(){
+    var el = document.getElementById('workspace-nudge');
+    if (!el) return;
+    var contacted = vendors.filter(function(v){ return v.status !== 'none'; });
+    if (contacted.length === 0) { el.innerHTML = ''; return; }
+    var names = contacted.slice(0,2).map(function(v){ return v.name; }).join(' and ');
+    var extra = contacted.length > 2 ? ' and ' + (contacted.length - 2) + ' other' + (contacted.length - 2 > 1 ? 's' : '') : '';
+    el.innerHTML = '' +
+      '<button type="button" class="referral-banner nudge-banner" onclick="switchTab(\'workspace\')">' +
+        '<span class="r-icon">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' +
+        '</span>' +
+        '<span class="r-text">' +
+          '<div class="r-title">You’re connected with ' + names + extra + '</div>' +
+          '<div class="r-sub">Track call times, notes and ratings in My Workspace</div>' +
+        '</span>' +
+        '<svg class="r-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
+      '</button>';
+  }
+
+  function renderAll(){ renderShortlist(); renderWorkspace(); renderWorkspaceNudge(); }
+
+  function switchTab(tab){
+    activeTab = tab;
+    document.getElementById('tab-shortlist').hidden = tab !== 'shortlist';
+    document.getElementById('tab-workspace').hidden = tab !== 'workspace';
+    document.getElementById('tab-chat').hidden = tab !== 'chat';
+    document.getElementById('nav-shortlist').classList.toggle('active', tab === 'shortlist');
+    document.getElementById('nav-workspace').classList.toggle('active', tab === 'workspace');
+    document.getElementById('nav-chat').classList.toggle('active', tab === 'chat');
+    document.getElementById('topbar-title').textContent = tab === 'shortlist' ? 'Your shortlist' : (tab === 'workspace' ? 'My workspace' : 'Chat with your agent');
+    if (tab === 'chat') { renderChat(); var input = document.getElementById('chat-input'); if (input) input.focus(); }
+  }
+  document.getElementById('nav-shortlist').addEventListener('click', function(){ switchTab('shortlist'); });
+  document.getElementById('nav-workspace').addEventListener('click', function(){ switchTab('workspace'); });
+  document.getElementById('nav-chat').addEventListener('click', function(){ switchTab('chat'); });
+
+  var pendingBudget = null;
+  var pendingScheduleVendorId = null;
+  var pendingDates = [];
+
+  function openScheduleModal(id){
+    pendingScheduleVendorId = id;
+    var backdrop = document.getElementById('modal-backdrop');
+    backdrop.hidden = false;
+    if (missingProfileFields().length > 0) {
+      renderGateStep(id);
+    } else {
+      renderScheduleForm(id);
+    }
+  }
+
+  // Gate: before scheduling, close any gaps in the buyer's profile that
+  // would otherwise leave the vendor call under-prepared.
+  function renderGateStep(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    pendingBudget = null;
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="action-btn-icon" style="background:rgba(87,70,178,0.12);width:44px;height:44px;margin-bottom:14px;">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5746B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>' +
+      '</div>' +
+      '<h3>Before you schedule with '+v.name+'</h3>' +
+      '<p class="modal-sub">One more detail sharpens your shortlist and helps '+v.name+' come to the call prepared.</p>' +
+      '<div class="field"><label>What\'s your rough budget range?</label>' +
+        '<div class="pill-options" id="budget-options">' +
+          '<button type="button" class="pill-option" data-b="Under $10k/yr" onclick="selectBudget(this,\'Under $10k/yr\')">Under $10k/yr</button>' +
+          '<button type="button" class="pill-option" data-b="$10k–$50k/yr" onclick="selectBudget(this,\'$10k–$50k/yr\')">$10k–$50k/yr</button>' +
+          '<button type="button" class="pill-option" data-b="$50k–$150k/yr" onclick="selectBudget(this,\'$50k–$150k/yr\')">$50k–$150k/yr</button>' +
+          '<button type="button" class="pill-option" data-b="$150k+/yr" onclick="selectBudget(this,\'$150k+/yr\')">$150k+/yr</button>' +
+        '</div></div>' +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Not now</button>' +
+        '<button class="btn btn-primary" id="gate-continue-btn" disabled onclick="submitGate(\''+v.id+'\')">Continue to scheduling</button>' +
+      '</div>';
+  }
+
+  function selectBudget(el, label){
+    pendingBudget = label;
+    document.querySelectorAll('#budget-options .pill-option').forEach(function(p){ p.classList.remove('selected'); });
+    el.classList.add('selected');
+    var btn = document.getElementById('gate-continue-btn');
+    btn.disabled = false;
+  }
+
+  function submitGate(id){
+    if (!pendingBudget) return;
+    profile.budget = pendingBudget;
+    profile.budgetLabel = pendingBudget;
+    document.getElementById('req-budget-value').textContent = pendingBudget;
+    document.getElementById('req-budget-value').classList.remove('muted');
+    bumpConfidence(14);
+    vendors.forEach(function(x){ x.blurred = false; });
+    renderShortlist();
+    showToast('Thanks — that unlocked the full fit analysis and helps every vendor prepare a sharper match.');
+    renderScheduleForm(id);
+  }
+
+  function bumpConfidence(amount){
+    var el = document.getElementById('confidence-num');
+    var meter = document.getElementById('confidence-meter');
+    var current = parseInt(el.textContent, 10) || 0;
+    var next = Math.min(100, current + amount);
+    el.textContent = next + '%';
+    meter.style.width = next + '%';
+  }
+
+  var calViewDate = new Date();
+  var pendingWindow = 'morning';
+  var pendingDay = null;
+  var pendingSlot = null;
+  var currentSchedVendor = null;
+
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function toRaw(y,m,d){ return y+'-'+pad2(m+1)+'-'+pad2(d); }
+  function daysInMonth(y,m){ return new Date(y, m+1, 0).getDate(); }
+  function slotMinutes(t){
+    var m = t.match(/(\d+):(\d+)\s*(AM|PM)/);
+    var h = parseInt(m[1],10), mins = parseInt(m[2],10);
+    if (m[3]==='PM' && h!==12) h += 12;
+    if (m[3]==='AM' && h===12) h = 0;
+    return h*60+mins;
+  }
+
+  // Mock "what the vendor has open" — deterministic per vendor+day so it feels
+  // like real Chili Piper-style availability rather than a random reshuffle.
+  function vendorSlotsForDay(v, raw){
+    var pool = ['9:00 AM','9:30 AM','10:30 AM','11:00 AM','1:00 PM','1:30 PM','2:30 PM','3:00 PM','4:00 PM','4:30 PM'];
+    var seed = 0;
+    for (var i=0;i<v.id.length;i++) seed += v.id.charCodeAt(i) * (i+1);
+    for (var j=0;j<raw.length;j++) seed += raw.charCodeAt(j) * (j+1);
+    var count = 3 + (seed % 2);
+    var startIdx = seed % pool.length;
+    var picks = [];
+    for (var k=0;k<count;k++){ picks.push(pool[(startIdx + k*3) % pool.length]); }
+    picks = picks.filter(function(t,idx){ return picks.indexOf(t) === idx; });
+    picks.sort(function(a,b){ return slotMinutes(a) - slotMinutes(b); });
+    return picks;
+  }
+
+  function renderCalendarGrid(){
+    var isProgram = currentSchedVendor && currentSchedVendor.scheduling === 'program';
+    var y = calViewDate.getFullYear(), m = calViewDate.getMonth();
+    var startWeekday = new Date(y,m,1).getDay();
+    var totalDays = daysInMonth(y,m);
+    var prevMonthDays = daysInMonth(m===0?y-1:y, m===0?11:m-1);
+
+    var today = new Date();
+    var todayRaw = toRaw(today.getFullYear(), today.getMonth(), today.getDate());
+    var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    var earliestRaw = toRaw(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
+
+    var cells = [];
+    for (var i=0;i<startWeekday;i++){
+      cells.push({ num: prevMonthDays - startWeekday + 1 + i, outside:true });
+    }
+    for (var d=1; d<=totalDays; d++){
+      var raw = toRaw(y,m,d);
+      var dow = new Date(y,m,d).getDay();
+      var pastEarliest = raw < earliestRaw;
+      var noAvailability = isProgram && (dow === 0 || dow === 6);
+      cells.push({ num:d, outside:false, raw:raw, disabled: pastEarliest || noAvailability, today: raw === todayRaw });
+    }
+    var trailing = 1;
+    while (cells.length % 7 !== 0){ cells.push({ num: trailing++, outside:true }); }
+
+    var monthLabel = calViewDate.toLocaleDateString(undefined,{month:'long', year:'numeric'});
+    var dowLabels = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+    var html = '' +
+      '<div class="cal-head">' +
+        '<button type="button" class="cal-nav-btn" onclick="changeMonth(-1)" aria-label="Previous month"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+        '<div class="cal-month">'+monthLabel+'</div>' +
+        '<button type="button" class="cal-nav-btn" onclick="changeMonth(1)" aria-label="Next month"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>' +
+      '</div>' +
+      '<div class="cal-dow-row">' + dowLabels.map(function(l){ return '<div class="cal-dow">'+l+'</div>'; }).join('') + '</div>' +
+      '<div class="cal-day-row">' + cells.map(function(c){
+        if (c.outside) return '<button type="button" class="cal-day-btn outside" disabled>'+c.num+'</button>';
+        if (c.disabled) return '<button type="button" class="cal-day-btn" disabled>'+c.num+'</button>';
+        var isSelected = isProgram ? (c.raw === pendingDay) : (pendingDates.indexOf(c.raw) !== -1);
+        var cls = 'cal-day-btn' + (c.today ? ' today' : '') + (isSelected ? ' selected' : '');
+        var handler = isProgram ? 'selectDay(this,\''+c.raw+'\')' : 'toggleCalDay(this,\''+c.raw+'\')';
+        return '<button type="button" class="'+cls+'" onclick="'+handler+'">'+c.num+'</button>';
+      }).join('') + '</div>' +
+      '<p class="cal-hint">' + (isProgram ? 'Pick a day to see ' + currentSchedVendor.name + '’s open times.' : 'Tap the days that work for you — up to 5.') + '</p>' +
+      (isProgram ? '<div id="slot-panel"></div>' : '');
+
+    document.getElementById('cal-grid-wrap').innerHTML = html;
+    if (isProgram && pendingDay) renderSlotPanel();
+  }
+
+  function changeMonth(delta){
+    calViewDate.setMonth(calViewDate.getMonth() + delta);
+    renderCalendarGrid();
+  }
+
+  // Program vendors: single day, real open slots underneath (Chili Piper-style).
+  function selectDay(el, raw){
+    pendingDay = raw;
+    pendingSlot = null;
+    document.querySelectorAll('.cal-day-btn').forEach(function(b){ b.classList.remove('selected'); });
+    el.classList.add('selected');
+    renderSlotPanel();
+    var btn = document.getElementById('sched-submit-btn');
+    if (btn) btn.disabled = true;
+  }
+
+  function renderSlotPanel(){
+    var panel = document.getElementById('slot-panel');
+    if (!panel) return;
+    var slots = vendorSlotsForDay(currentSchedVendor, pendingDay);
+    var dLabel = new Date(pendingDay+'T00:00:00').toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+    panel.innerHTML = '' +
+      '<div class="field-title" style="margin-top:14px;">Open times · '+dLabel+'</div>' +
+      '<div class="pill-options" id="slot-options">' +
+        slots.map(function(t){
+          return '<button type="button" class="pill-option" onclick="selectSlot(this,\''+t+'\')">'+t+'</button>';
+        }).join('') +
+      '</div>';
+  }
+
+  function selectSlot(el, t){
+    pendingSlot = t;
+    document.querySelectorAll('#slot-options .pill-option').forEach(function(p){ p.classList.remove('selected'); });
+    el.classList.add('selected');
+    var btn = document.getElementById('sched-submit-btn');
+    if (btn) btn.disabled = false;
+  }
+
+  // Availability (non-program) vendors: multiple candidate days + a time of day.
+  function toggleCalDay(el, raw){
+    var i = pendingDates.indexOf(raw);
+    if (i === -1) {
+      if (pendingDates.length >= 5) { showToast('You can offer up to 5 days.'); return; }
+      pendingDates.push(raw);
+      el.classList.add('selected');
+    } else {
+      pendingDates.splice(i, 1);
+      el.classList.remove('selected');
+    }
+    pendingDates.sort();
+    var btn = document.getElementById('sched-submit-btn');
+    if (btn) btn.disabled = pendingDates.length === 0;
+  }
+
+  function selectWindow(el, w){
+    pendingWindow = w;
+    document.querySelectorAll('#window-options .pill-option').forEach(function(p){ p.classList.remove('selected'); });
+    el.classList.add('selected');
+  }
+
+  function renderScheduleForm(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    currentSchedVendor = v;
+    pendingDates = [];
+    pendingDay = null;
+    pendingSlot = null;
+    pendingWindow = 'morning';
+    calViewDate = new Date(); calViewDate.setDate(1);
+    var isProgram = v.scheduling === 'program';
+    var title = isProgram ? 'Schedule a call with '+v.name : 'Send availability to '+v.name;
+    var sub = isProgram
+      ? 'Pick an open time — it books instantly with '+v.name+'.'
+      : v.name+' isn\'t on our scheduling program yet — we\'ll pass along the days you pick. '+v.schedNote+'.';
+
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<h3>'+title+'</h3>' +
+      '<p class="modal-sub">'+sub+'</p>' +
+      '<div id="cal-grid-wrap"></div>' +
+      (isProgram ? '' :
+        '<div class="field" style="margin-top:8px;"><label>Time of day</label>' +
+          '<div class="pill-options" id="window-options">' +
+            '<button type="button" class="pill-option selected" onclick="selectWindow(this,\'morning\')">Morning</button>' +
+            '<button type="button" class="pill-option" onclick="selectWindow(this,\'afternoon\')">Afternoon</button>' +
+            '<button type="button" class="pill-option" onclick="selectWindow(this,\'evening\')">Evening</button>' +
+          '</div>' +
+        '</div>') +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
+        '<button class="btn btn-primary" id="sched-submit-btn" disabled onclick="submitSchedule(\''+v.id+'\')">'+(isProgram?'Confirm':'Done')+'</button>' +
+      '</div>';
+    renderCalendarGrid();
+  }
+
+  function formatDateList(raws){
+    return raws.map(function(raw){
+      var d = new Date(raw+'T00:00:00');
+      return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+    });
+  }
+
+  function submitSchedule(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    var isProgram = v.scheduling === 'program';
+
+    if (isProgram) {
+      if (!pendingDay || !pendingSlot) return;
+      v.status = 'confirmed';
+      v.requestedDates = [pendingDay];
+      v.requestedWindow = pendingSlot;
+    } else {
+      if (pendingDates.length === 0) return;
+      v.status = 'requested';
+      v.requestedDates = pendingDates.slice();
+      v.requestedWindow = capitalize(pendingWindow);
+    }
+
+    var dateStrs = formatDateList(v.requestedDates);
+    var dateSentence = dateStrs.length > 1
+      ? dateStrs.slice(0,-1).join(', ') + ' or ' + dateStrs[dateStrs.length-1]
+      : dateStrs[0];
+    var headline = isProgram ? 'You’re booked with '+v.name : 'Availability sent to '+v.name;
+    var body = isProgram
+      ? dateSentence+' at '+v.requestedWindow+'. It’s on the calendar — we’ll send a reminder before it starts.'
+      : 'We shared '+dateSentence+' ('+v.requestedWindow+') with '+v.name+'. They '+v.schedNote.toLowerCase()+' to lock in a time — we\'ll keep you posted here.';
+
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="confirm-state">' +
+        '<div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a7d70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+        '<h3>'+headline+'</h3>' +
+        '<p>'+body+'</p>' +
+        '<div class="modal-actions" style="justify-content:center;">' +
+          '<button class="btn btn-ghost" onclick="closeModal()">Stay here</button>' +
+          '<button class="btn btn-primary" onclick="goToWorkspace()">Go to My Workspace</button>' +
+        '</div>' +
+      '</div>';
+    renderAll();
+  }
+
+  function goToWorkspace(){
+    closeModal();
+    switchTab('workspace');
+  }
+
+  var pendingAlertChannels = { email: true, sms: false };
+
+  function openAlertsModal(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    pendingAlertChannels = {
+      email: !!(v.alertChannels && v.alertChannels.email),
+      sms: !!(v.alertChannels && v.alertChannels.sms)
+    };
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<h3>Alerts from '+v.name+'</h3>' +
+      '<p class="modal-sub">We’ll let you know the moment '+v.name+' reaches out or updates your request — no need to keep checking back. Turn it off any time.</p>' +
+      '<div class="field"><label>Notify me by</label>' +
+        '<div class="pill-options" id="alert-channel-options">' +
+          '<button type="button" class="pill-option'+(pendingAlertChannels.email?' selected':'')+'" data-c="email" onclick="toggleAlertChannel(this,\'email\')">Email</button>' +
+          '<button type="button" class="pill-option'+(pendingAlertChannels.sms?' selected':'')+'" data-c="sms" onclick="toggleAlertChannel(this,\'sms\')">Text (SMS)</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field"><label for="alert-email">Email</label>' +
+        '<input type="text" id="alert-email" value="arosha@buyer.com" style="width:100%;border:1px solid var(--gray200);border-radius:6px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--text);"></div>' +
+      '<div class="field" id="alert-phone-field" '+(pendingAlertChannels.sms?'':'hidden')+'><label for="alert-phone">Mobile number</label>' +
+        '<input type="text" id="alert-phone" placeholder="(555) 555-0100" style="width:100%;border:1px solid var(--gray200);border-radius:6px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--text);"></div>' +
+      '<div class="modal-actions">' +
+        (v.alertsOn ? '<button class="btn btn-ghost" onclick="turnOffAlerts(\''+v.id+'\')">Turn off alerts</button>' : '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>') +
+        '<button class="btn btn-primary" onclick="saveAlerts(\''+v.id+'\')">Save</button>' +
+      '</div>';
+    backdrop.hidden = false;
+  }
+
+  function toggleAlertChannel(el, c){
+    pendingAlertChannels[c] = !pendingAlertChannels[c];
+    el.classList.toggle('selected', pendingAlertChannels[c]);
+    var phoneField = document.getElementById('alert-phone-field');
+    if (phoneField) phoneField.hidden = !pendingAlertChannels.sms;
+  }
+
+  function saveAlerts(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    v.alertChannels = { email: pendingAlertChannels.email, sms: pendingAlertChannels.sms };
+    v.alertsOn = pendingAlertChannels.email || pendingAlertChannels.sms;
+    var via = [];
+    if (pendingAlertChannels.email) via.push('email');
+    if (pendingAlertChannels.sms) via.push('text');
+    closeModal();
+    renderShortlist();
+    showToast(v.alertsOn
+      ? 'You’ll get ' + via.join(' & ') + ' alerts from ' + v.name + '.'
+      : 'Alerts from ' + v.name + ' are off.');
+  }
+
+  function turnOffAlerts(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    v.alertChannels = { email: false, sms: false };
+    v.alertsOn = false;
+    closeModal();
+    renderShortlist();
+    showToast('Alerts from ' + v.name + ' are off.');
+  }
+
+  var pendingConvoRating = 0;
+
+  function openConvoModal(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    pendingConvoRating = (v.convo && v.convo.rating) || 0;
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<h3>Your conversation with '+v.name+'</h3>' +
+      '<p class="modal-sub">Keep track of how it went — only you can see this unless you choose to post the review.</p>' +
+      '<div class="field"><label>How likable was the sales rep?</label>' +
+        '<div class="star-picker" id="convo-star-picker">' +
+          [1,2,3,4,5].map(function(n){
+            return '<button type="button" data-n="'+n+'" onclick="selectConvoRating('+n+')">'+(n<=pendingConvoRating?'★':'☆')+'</button>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="field"><label for="convo-notes">Private notes</label>' +
+        '<textarea id="convo-notes" placeholder="What did you talk about? Any red flags or highlights?">'+((v.convo && v.convo.notes) || '')+'</textarea></div>' +
+      '<div class="field"><label for="convo-review">Public review (optional)</label>' +
+        '<textarea id="convo-review" placeholder="Share your experience for other buyers on G2">'+((v.convo && v.convo.review) || '')+'</textarea></div>' +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
+        '<button class="btn btn-primary" onclick="saveConvo(\''+v.id+'\')">Save</button>' +
+      '</div>';
+    backdrop.hidden = false;
+  }
+
+  function selectConvoRating(n){
+    pendingConvoRating = n;
+    document.querySelectorAll('#convo-star-picker button').forEach(function(btn){
+      var val = parseInt(btn.getAttribute('data-n'),10);
+      btn.textContent = val <= n ? '★' : '☆';
+      btn.classList.toggle('filled', val <= n);
+    });
+  }
+
+  function saveConvo(id){
+    var v = vendors.find(function(x){ return x.id === id; });
+    var notesEl = document.getElementById('convo-notes');
+    var reviewEl = document.getElementById('convo-review');
+    v.convo = {
+      rating: pendingConvoRating,
+      notes: notesEl ? notesEl.value.trim() : '',
+      review: reviewEl ? reviewEl.value.trim() : ''
+    };
+    closeModal();
+    renderConvoList();
+    renderDecisionHelp();
+    showToast('Saved your notes on ' + v.name + '.' + (v.convo.review ? ' Your review will be posted to G2.' : ''));
+  }
+
+  function openAlertsOverviewModal(){
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<h3>Manage vendor alerts</h3>' +
+      '<p class="modal-sub">Choose how each vendor on your shortlist can reach you. Uncheck both boxes to opt a vendor out entirely.</p>' +
+      '<div>' + vendors.map(function(v){
+        var em = !!(v.alertChannels && v.alertChannels.email);
+        var sm = !!(v.alertChannels && v.alertChannels.sms);
+        return '' +
+        '<div class="alert-bulk-row">' +
+          '<div class="abr-name">'+v.name+'</div>' +
+          '<div class="abr-checks">' +
+            '<label><input type="checkbox" data-vendor="'+v.id+'" data-c="email" '+(em?'checked':'')+'> Email</label>' +
+            '<label><input type="checkbox" data-vendor="'+v.id+'" data-c="sms" '+(sm?'checked':'')+'> Text</label>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>' +
+      '<div class="modal-actions" style="margin-top:16px;">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
+        '<button class="btn btn-primary" onclick="saveAlertsOverview()">Save</button>' +
+      '</div>';
+    backdrop.hidden = false;
+  }
+
+  function saveAlertsOverview(){
+    document.querySelectorAll('.alert-bulk-row input[type="checkbox"]').forEach(function(box){
+      var v = vendors.find(function(x){ return x.id === box.getAttribute('data-vendor'); });
+      if (!v) return;
+      if (!v.alertChannels) v.alertChannels = { email:false, sms:false };
+      v.alertChannels[box.getAttribute('data-c')] = box.checked;
+    });
+    vendors.forEach(function(v){
+      v.alertsOn = !!(v.alertChannels && (v.alertChannels.email || v.alertChannels.sms));
+    });
+    closeModal();
+    renderShortlist();
+    showToast('Alert preferences updated.');
+  }
+
+  function openReferralModal(){
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="action-btn-icon" style="background:rgba(255,200,0,0.25);width:44px;height:44px;margin-bottom:14px;color:#111;">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9"/></svg>' +
+      '</div>' +
+      '<h3>Refer a friend, get $50</h3>' +
+      '<p class="modal-sub">If you refer a friend and we build them a shortlist too, we’ll send you a $50 gift card as a thank you.</p>' +
+      '<div class="field"><label for="ref-email">Friend’s email</label>' +
+        '<input type="text" id="ref-email" placeholder="friend@company.com" style="width:100%;border:1px solid var(--gray200);border-radius:6px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--text);"></div>' +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeModal()">Not now</button>' +
+        '<button class="btn btn-primary" onclick="submitReferral()">Send invite</button>' +
+      '</div>';
+    backdrop.hidden = false;
+  }
+
+  function submitReferral(){
+    var emailEl = document.getElementById('ref-email');
+    var email = emailEl && emailEl.value.trim();
+    if (!email) { showToast('Add your friend’s email first.'); return; }
+    var modalEl = document.getElementById('modal-body');
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<div class="confirm-state">' +
+        '<div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a7d70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+        '<h3>Invite sent</h3>' +
+        '<p>We emailed '+email+' an invite to get their own shortlist. Once they get it, we’ll send your $50 gift card.</p>' +
+        '<button class="btn btn-primary" onclick="closeModal()">Done</button>' +
+      '</div>';
+  }
+
+  var chatMessages = [
+    { from: 'agent', text: 'Hi! I’m here to help sharpen your shortlist. Want to tell me more about your must-have integrations, or how your team is structured?' }
+  ];
+  var agentReplies = [
+    'Got it — thanks for sharing. That helps sharpen your match confidence a bit more.',
+    'Good to know. I’ve noted that for your shortlist — anything else about budget or timeline?',
+    'That’s useful context. Want to tell me more, or head back to your shortlist to see the update?'
+  ];
+  var agentReplyIdx = 0;
+
+  function renderChat(){
+    var el = document.getElementById('chat-messages');
+    if (!el) return;
+    el.innerHTML = chatMessages.map(function(m){
+      return '<div class="chat-msg '+m.from+'">'+m.text+'</div>';
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function sendChatMessage(){
+    var input = document.getElementById('chat-input');
+    var text = input ? input.value.trim() : '';
+    if (!text) return;
+    chatMessages.push({ from: 'buyer', text: text });
+    input.value = '';
+    renderChat();
+    bumpConfidence(4);
+    setTimeout(function(){
+      chatMessages.push({ from: 'agent', text: agentReplies[agentReplyIdx % agentReplies.length] });
+      agentReplyIdx++;
+      renderChat();
+    }, 500);
+  }
+
+  var sharedPeople = [];
+  var shareLink = 'https://g2.com/w/hr-eval-9k2f';
+
+  function openShareModal(){
+    var backdrop = document.getElementById('modal-backdrop');
+    var modalEl = document.getElementById('modal-body');
+    modalEl.className = 'modal modal-wrap';
+    modalEl.innerHTML = '' +
+      '<button class="modal-close" onclick="closeModal()" aria-label="Close">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<h3>Share with your team</h3>' +
+      '<p class="modal-sub">Invite a colleague to see this shortlist, your notes, and scheduling status — everything stays in sync as you update it.</p>' +
+      '<div class="field"><label for="share-email">Invite by email</label>' +
+        '<div class="share-link-row">' +
+          '<input type="text" id="share-email" placeholder="colleague@company.com" style="background:var(--white);">' +
+          '<button class="btn btn-primary btn-sm" onclick="inviteToShare()">Invite</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field"><label>Shareable link</label>' +
+        '<div class="share-link-row">' +
+          '<input type="text" id="share-link-input" value="'+shareLink+'" readonly>' +
+          '<button class="btn btn-ghost btn-sm" onclick="copyShareLink()">Copy link</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field"><label>People with access</label>' +
+        '<div class="share-people" id="share-people-list"></div>' +
+      '</div>' +
+      '<div class="modal-actions">' +
+        '<button class="btn btn-primary" onclick="closeModal()">Done</button>' +
+      '</div>';
+    backdrop.hidden = false;
+    renderSharePeople();
+  }
+
+  function renderSharePeople(){
+    var el = document.getElementById('share-people-list');
+    if (!el) return;
+    var rows = '' +
+      '<div class="share-person-row">' +
+        '<div class="share-person-left">' +
+          '<div class="share-person-avatar">JT</div>' +
+          '<div><div class="share-person-email">You</div><div class="share-person-role">Owner</div></div>' +
+        '</div>' +
+      '</div>';
+    rows += sharedPeople.map(function(email, i){
+      var initials = email.slice(0,2).toUpperCase();
+      return '' +
+      '<div class="share-person-row">' +
+        '<div class="share-person-left">' +
+          '<div class="share-person-avatar">'+initials+'</div>' +
+          '<div><div class="share-person-email">'+email+'</div><div class="share-person-role">Can view · Invite sent</div></div>' +
+        '</div>' +
+        '<button type="button" class="share-remove-btn" onclick="removeSharedPerson('+i+')" aria-label="Remove">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+        '</button>' +
+      '</div>';
+    }).join('');
+    el.innerHTML = rows;
+  }
+
+  function inviteToShare(){
+    var input = document.getElementById('share-email');
+    var email = input ? input.value.trim() : '';
+    if (!email) { showToast('Add a colleague’s email first.'); return; }
+    if (sharedPeople.indexOf(email) === -1) sharedPeople.push(email);
+    input.value = '';
+    renderSharePeople();
+    showToast('Invite sent to ' + email + '.');
+  }
+
+  function removeSharedPerson(i){
+    var email = sharedPeople[i];
+    sharedPeople.splice(i, 1);
+    renderSharePeople();
+    showToast('Removed ' + email + '’s access.');
+  }
+
+  function copyShareLink(){
+    try {
+      navigator.clipboard.writeText(shareLink);
+    } catch (e) {}
+    showToast('Link copied — anyone with it can view this workspace.');
+  }
+
+  function closeModal(){
+    document.getElementById('modal-backdrop').hidden = true;
+  }
+  document.getElementById('modal-backdrop').addEventListener('click', function(e){
+    if (e.target === this) closeModal();
+  });
+
+  var toastTimer = null;
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+
+  renderAll();
+</script>
